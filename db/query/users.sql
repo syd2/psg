@@ -3,12 +3,9 @@
 SELECT * FROM users
 WHERE id = $1 LIMIT 1;
 
--- name: CreateUser :exec
-INSERT INTO users (
-    username, password
-) VALUES (
-    $1, $2
-) RETURNING *;
+-- name: CreateUser :one
+INSERT INTO users (username, password)
+VALUES ($1, $2) RETURNING *;
 
 -- name: GetUserName :one
 SELECT username FROM users

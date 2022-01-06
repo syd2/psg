@@ -24,26 +24,23 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
-const getUser = `-- name: GetUser :one
-SELECT id, username, password FROM users
-WHERE id = $1 LIMIT 1
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM users WHERE id = $1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, id)
+func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, id)
+	return err
+}
+
+const getUser = `-- name: GetUser :one
+SELECT id, username, password FROM users
+WHERE username = $1 LIMIT 1
+`
+
+func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, username)
 	var i User
 	err := row.Scan(&i.ID, &i.Username, &i.Password)
 	return i, err
-}
-
-const getUserName = `-- name: GetUserName :one
-SELECT username FROM users
-WHERE id = $1 LIMIT 1
-`
-
-func (q *Queries) GetUserName(ctx context.Context, id int64) (string, error) {
-	row := q.db.QueryRowContext(ctx, getUserName, id)
-	var username string
-	err := row.Scan(&username)
-	return username, err
 }

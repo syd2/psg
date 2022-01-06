@@ -2,15 +2,13 @@
 
 package db
 
-import (
-	"database/sql"
-)
+import ()
 
 type Password struct {
-	ID          int64         `json:"id"`
-	AppName     string        `json:"app_name"`
-	AppPassword string        `json:"app_password"`
-	UserID      sql.NullInt64 `json:"user_id"`
+	ID          int64  `json:"id"`
+	AppName     string `json:"app_name"`
+	AppPassword string `json:"app_password"`
+	UserID      int64  `json:"user_id"`
 }
 
 type User struct {

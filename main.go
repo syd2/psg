@@ -1,36 +1,31 @@
 package main
 
 import (
-	"context"
-	"database/sql"
-	"log"
-
-	"github.com/syd2/psg/db/db"
-
+	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
+	"github.com/syd2/psg/api"
+	"github.com/syd2/psg/api/handlers"
+	"github.com/syd2/psg/server"
 )
 
 func main() {
-	conn, err := sql.Open("postgres", "user=postgres password=syd0101 dbname=psg sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	postgres := db.New(conn)
-	log.Println("connected to the db")
+	router := chi.NewRouter()
+	s := server.NewServer()
 
-	//creating new user
-	newUser(postgres, "admin", "admin0101")
-
-}
-
-func newUser(postgres *db.Queries, username string, password string) {
-	error := postgres.CreateUser(context.Background(), db.CreateUserParams{
-		Username: username,
-		Password: password,
+	router.Group(func(r chi.Router) {
+		r.Get("/", handlers.HelloWorldHandler())
+		r.Post("/users/create", handlers.CreateUserHandler(s.Queries, "syd0101"))
+		r.Post("/users/login", handlers.LoginUserHandler(s.Queries, "syd0101"))
 	})
-	if error != nil {
-		log.Fatal(error)
-	}
-	log.Println("Created")
+
+	//private routes
+	router.Group(func(r chi.Router) {
+		r.Use(api.AuthWrapper("syd0101"))
+		r.Get("/test", handlers.HelloWorldHandler())
+
+	})
+	s.Router.Mount("/", router)
+	s.RunServer()
+
 }

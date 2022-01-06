@@ -11,11 +11,15 @@ dropdb:
 	docker exec -it postgres12 dropdb -U postgres psg
 
 migrate_up:
-	migrate -source file://db/migrations -database "postgresql://postgres:syd0101@localhost:5432/psg?sslmode=disable" -verbose up
+#migrate -source file://db/migrations -database "postgresql://postgres:syd0101@localhost:5432/psg?sslmode=disable" -verbose up
+	docker run -v C:\Users\admin\Desktop\psg\db\migrations:/migrations --network host migrate/migrate -path=/migrations/ -database "postgres://postgres:syd0101@localhost:5432/psg?sslmode=disable" -verbose up
+
 
 migrate_down:
-	migrate -source file://db/migrations -database "postgresql://postgres:syd0101@localhost:5432/psg?sslmode=disable" -verbose down
+	docker run -v C:\Users\admin\Desktop\psg\db\migrations:/migrations --network host migrate/migrate -path=/migrations/ -database "postgres://postgres:syd0101@localhost:5432/psg?sslmode=disable" -verbose down
 sqlc_generate:
 	docker run --rm -v C:\Users\admin\Desktop\psg:/src -w /src kjconroy/sqlc generate
 
+runserver:
+	go run main.go
 .PHONY: createdb dropdb migrate_up postgres sqlc_generate

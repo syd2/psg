@@ -1,4 +1,4 @@
--- name : CreatePassword :exec
+-- name: CreatePassword :one
 
 INSERT INTO passwords (app_name, app_password, user_id) 
 VALUES ($1, $2, $3) RETURNING *;

@@ -14,7 +14,7 @@ func main() {
 	s := server.NewServer()
 
 	router.Group(func(r chi.Router) {
-		r.Get("/", handlers.HelloWorldHandler())
+		r.Get("/", handlers.HelloWorldHandler(s.Queries))
 		r.Post("/users/create", handlers.CreateUserHandler(s.Queries, "syd0101"))
 		r.Post("/users/login", handlers.LoginUserHandler(s.Queries, "syd0101"))
 	})
@@ -22,7 +22,7 @@ func main() {
 	//private routes
 	router.Group(func(r chi.Router) {
 		r.Use(api.AuthWrapper("syd0101"))
-		r.Get("/test", handlers.HelloWorldHandler())
+		r.Get("/test", handlers.HelloWorldHandler(s.Queries))
 
 	})
 	s.Router.Mount("/", router)

@@ -25,6 +25,7 @@ func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 		if err != nil {
 			log.Fatal(err)
 			utils.Json(w, resp, http.StatusInternalServerError)
+			return
 		}
 
 		if params.AppName == "" || params.AppPassword == "" {
@@ -43,7 +44,9 @@ func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 			utils.Json(w, resp, http.StatusInternalServerError)
 			return
 		}
-		resp["message"] = fmt.Sprintf("your new password created successfully \n app name : %v \n password : %v", password.AppName, password.AppPassword)
+		resp["message"] = fmt.Sprintf("your new password created successfully \n")
+		resp["message"] = fmt.Sprintf("app name : %v ,  password : %v \n", password.AppName, password.AppPassword)
+		utils.Json(w, resp, http.StatusCreated)
 		utils.Json(w, resp, http.StatusCreated)
 		return
 

@@ -23,7 +23,7 @@ func main() {
 	router.Group(func(r chi.Router) {
 		r.Use(api.AuthWrapper("syd0101"))
 		r.Get("/test", handlers.HelloWorldHandler(s.Queries))
-		r.Post("create/password", handlers.CreatePasswordHandler(s.Queries, "syd0101"))
+		r.Post("/create/password", handlers.CreatePasswordHandler(s.Queries, "syd0101"))
 
 	})
 	s.Router.Mount("/", router)

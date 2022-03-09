@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/syd2/psg/db/db"
 )
@@ -21,9 +20,7 @@ func HelloWorldHandler(q *db.Queries) http.HandlerFunc {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf(strconv.Itoa(int(userid)) + ":")
-		fmt.Printf(fmt.Sprintf("hello, %s \n", string(user.Username)))
-		// w.Write([]byte(fmt.Sprintf("hello, %s ", user.Username)))
+		w.Write([]byte(fmt.Sprintf("hello, %s ", user.Username)))
 
 	}
 

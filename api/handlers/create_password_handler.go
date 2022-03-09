@@ -16,7 +16,7 @@ func main() {
 	fmt.Println("")
 }
 
-func CreatePasswordHandler(q db.Queries, secret string) http.HandlerFunc {
+func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		resp := map[string]string{"error": "something went wrong!"}
 		params := db.CreatePasswordParams{}

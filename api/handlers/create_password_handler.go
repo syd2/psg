@@ -44,10 +44,10 @@ func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 			utils.Json(w, resp, http.StatusInternalServerError)
 			return
 		}
-		resp["message"] = fmt.Sprintf("your new password created successfully \n")
-		resp["message"] = fmt.Sprintf("app name : %v ,  password : %v \n", password.AppName, password.AppPassword)
-		utils.Json(w, resp, http.StatusCreated)
-		utils.Json(w, resp, http.StatusCreated)
+		res := map[string]string{"message": fmt.Sprintf("your new password created successfully")}
+		res_2 := fmt.Sprintf("app name : %v ,  password : %v ", password.AppName, password.AppPassword)
+		utils.Json(w, res, http.StatusCreated)
+		utils.Json(w, res_2, http.StatusCreated)
 		return
 
 	}

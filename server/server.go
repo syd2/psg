@@ -21,8 +21,9 @@ func NewServer() *Server {
 	s := &Server{}
 
 	//preparing the db
-	const dbSource = "postgresql://postgres:syd0101@localhost:5432/psg?sslmode=disable"
-	conn, err := sql.Open("postgres", dbSource)
+	dbSource := config.DBSource
+	dbDriver := config.DBDriver
+	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to the db : ", err.Error())
 

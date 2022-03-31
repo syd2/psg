@@ -12,18 +12,22 @@ func main() {
 
 	router := chi.NewRouter()
 	s := server.NewServer()
-
+	config, err := utils.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Cant log config")
+	}
+	secret := config.Secret
 	router.Group(func(r chi.Router) {
 		r.Get("/", handlers.HelloWorldHandler(s.Queries))
-		r.Post("/users/create", handlers.CreateUserHandler(s.Queries, "syd0101"))
-		r.Post("/users/login", handlers.LoginUserHandler(s.Queries, "syd0101"))
+		r.Post("/users/create", handlers.CreateUserHandler(s.Queries, secret))
+		r.Post("/users/login", handlers.LoginUserHandler(s.Queries, secret))
 	})
 
 	//private routes
 	router.Group(func(r chi.Router) {
-		r.Use(api.AuthWrapper("syd0101"))
+		r.Use(api.AuthWrapper(secret))
 		r.Get("/test", handlers.HelloWorldHandler(s.Queries))
-		r.Post("/create/password", handlers.CreatePasswordHandler(s.Queries, "syd0101"))
+		r.Post("/create/password", handlers.CreatePasswordHandler(s.Queries, secret))
 
 	})
 	s.Router.Mount("/", router)

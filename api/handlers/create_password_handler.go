@@ -40,6 +40,13 @@ func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 		password, err := q.CreatePassword(ctx, params)
 
 		if err != nil {
+			if pqError, k := err.(*pq.Error); k {
+				switch pqError.Code.Name() {
+				case "unique_violation":
+					resp["error"] = fmt.Sprintf("this app '%s' already has a password", params.AppName)
+					utils.Json(w, resp, http.StatusBadRequest)
+				}
+			}
 			resp["error"] = fmt.Sprintf("Error creating user: %v", err)
 			utils.Json(w, resp, http.StatusInternalServerError)
 			return

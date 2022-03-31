@@ -7,7 +7,7 @@ CREATE TABLE users (
 
 CREATE TABLE passwords (
     id BIGSERIAL NOT NULL PRIMARY KEY,
-    app_name varchar(200) NOT NULL,
+    app_name varchar(200) NOT NULL UNIQUE,
     app_password varchar(100) NOT NULL,
     user_id BIGINT REFERENCES users (id) ON DELETE CASCADE NOT NULL
 );

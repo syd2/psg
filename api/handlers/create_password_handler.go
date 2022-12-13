@@ -8,13 +8,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/lib/pq"
 	"github.com/syd2/psg/db/db"
 	"github.com/syd2/psg/utils"
 )
-
-func main() {
-	fmt.Println("")
-}
 
 func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +44,7 @@ func CreatePasswordHandler(q *db.Queries, secret string) http.HandlerFunc {
 					utils.Json(w, resp, http.StatusBadRequest)
 				}
 			}
-			resp["error"] = fmt.Sprintf("Error creating user: %v", err)
+			resp["error"] = fmt.Sprintf("Error creating new password: %v", err)
 			utils.Json(w, resp, http.StatusInternalServerError)
 			return
 		}

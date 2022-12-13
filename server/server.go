@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	_ "github.com/lib/pq"
 	"github.com/syd2/psg/db/db"
+	"github.com/syd2/psg/utils"
 )
 
 type Server struct {
@@ -19,6 +20,9 @@ type Server struct {
 
 func NewServer() *Server {
 	s := &Server{}
+
+	//loading configs
+	config, err := utils.LoadConfig(".")
 
 	//preparing the db
 	dbSource := config.DBSource

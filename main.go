@@ -1,11 +1,14 @@
 package main
 
 import (
+	"log"
+
 	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 	"github.com/syd2/psg/api"
 	"github.com/syd2/psg/api/handlers"
 	"github.com/syd2/psg/server"
+	"github.com/syd2/psg/utils"
 )
 
 func main() {
